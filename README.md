@@ -1,20 +1,38 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# DOWNLOADABLE – THE PSYCHOLOGY OF MARKETING QUIZ (SUPABASE VERSION)
 
-# Run and deploy your AI Studio app
+## Deployment Instructions
 
-This contains everything you need to run your app locally.
+This project has been completely refactored to use a Supabase (PostgreSQL) backend, replacing the old Google Sheets approach. It now includes:
+- Realtime Live Leaderboard (Top 5)
+- Strict One-Time Attempt Enforcement via Roll Number (no retakes!)
+- Automatic Database Saving on Quiz Completion
+- Automated High-Resolution Certificate Generation
+- Premium Dark Theme UI with Purple/Gold Accents
 
-View your app in AI Studio: https://ai.studio/apps/768f74c1-f01e-4ead-9d9e-c7cea49d0df7
+### 1. Supabase Backend Setup
+1. Create a new project at [Supabase](https://supabase.com).
+2. Go to the **SQL Editor**, and run the entire script found in `supabase-setup.sql` in this repo.
+   This script will:
+   - Create the `quiz_results` table.
+   - Setup Row Level Security (RLS) policies.
+   - Enable realtime features for the `quiz_results` table.
 
-## Run Locally
+### 2. Frontend Environment Setup
+1. In the root directory, create a `.env` file containing your Supabase URL and Anon Key.
+```
+VITE_SUPABASE_URL=your-supabase-url-here
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key-here
+```
+*(You can find these in your Supabase project settings under API).*
 
-**Prerequisites:**  Node.js
+### 3. Local Development
+1. Run `npm install` to install all necessary dependencies (including `@supabase/supabase-js`, `tailwindcss`, `lucide-react`, `motion`, `html2canvas`).
+2. Run `npm run dev` to start the local Vite development server.
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 4. Production Deployment (Vercel, Netlify, etc.)
+1. Link your GitHub repository to Vercel/Netlify.
+2. In the deployment settings, add the environment variables:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+3. The build command is `npm run build` and output directory is `dist`.
+4. Deploy the application! It will now function completely with realtime leaderboards, preventing duplicate roll numbers via PostgreSQL UNIQUE constraints and checking before attempts.
