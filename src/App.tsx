@@ -224,17 +224,34 @@ export default function App() {
     if (certificateRef.current) {
       try {
         setIsDownloading(true);
+        // Small delay to allow the React state (isDownloading) to reflect in the UI
+        await new Promise(resolve => setTimeout(resolve, 150));
+
         const canvas = await html2canvas(certificateRef.current, {
           scale: 2,
           backgroundColor: '#020617', // Navy-950 base color
           useCORS: true,
+          logging: false,
         });
-        const link = document.createElement('a');
-        link.download = `Certificate_${studentData.rollNumber}.png`;
-        link.href = canvas.toDataURL('image/png', 1.0);
-        document.body.appendChild(link); // Important for Firefox and some mobile browsers
-        link.click();
-        document.body.removeChild(link);
+
+        await new Promise<void>((resolve, reject) => {
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              reject(new Error('Failed to create blob from canvas'));
+              return;
+            }
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = `Certificate_${studentData.rollNumber}.png`;
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            resolve();
+          }, 'image/png');
+        });
+
       } catch (error) {
         console.error('Error generating certificate:', error);
       } finally {
