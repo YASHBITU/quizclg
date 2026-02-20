@@ -88,8 +88,7 @@ export default function App() {
       const { data, error } = await supabase
         .from('quiz_results')
         .select('full_name, roll_number, score, percentage, badge')
-        .order('score', { ascending: false })
-        .limit(5);
+        .order('score', { ascending: false });
 
       if (error) {
         console.error("Supabase error fetching leaderboard:", error);
@@ -115,7 +114,7 @@ export default function App() {
           { event: 'INSERT', schema: 'public', table: 'quiz_results' },
           (payload) => {
             console.log('New insert received!', payload);
-            fetchLeaderboard(); // Refetch top 5 on new insert
+            fetchLeaderboard(); // Refetch on new insert
           }
         )
         .subscribe();
@@ -634,7 +633,7 @@ export default function App() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 px-2">
               <div className="space-y-2">
                 <h2 className="text-4xl md:text-5xl font-display font-bold">Real-time <span className="gradient-text">Leaderboard</span></h2>
-                <p className="text-slate-400">Live rankings of the top performers (Top 5)</p>
+                <p className="text-slate-400">Live rankings of all performers</p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
