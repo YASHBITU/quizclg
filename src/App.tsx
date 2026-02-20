@@ -54,6 +54,7 @@ export default function App() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [isLoadingLeaderboard, setIsLoadingLeaderboard] = useState(false);
   const [feedback, setFeedback] = useState<{ questionId: number, option: string, isCorrect: boolean } | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const certificateRef = useRef<HTMLDivElement>(null);
 
@@ -221,14 +222,24 @@ export default function App() {
 
   const downloadCertificate = async () => {
     if (certificateRef.current) {
-      const canvas = await html2canvas(certificateRef.current, {
-        scale: 2,
-        backgroundColor: '#020617', // Navy-950 base color
-      });
-      const link = document.createElement('a');
-      link.download = `Certificate_${studentData.rollNumber}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      try {
+        setIsDownloading(true);
+        const canvas = await html2canvas(certificateRef.current, {
+          scale: 2,
+          backgroundColor: '#020617', // Navy-950 base color
+          useCORS: true,
+        });
+        const link = document.createElement('a');
+        link.download = `Certificate_${studentData.rollNumber}.png`;
+        link.href = canvas.toDataURL('image/png', 1.0);
+        document.body.appendChild(link); // Important for Firefox and some mobile browsers
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error('Error generating certificate:', error);
+      } finally {
+        setIsDownloading(false);
+      }
     }
   };
 
@@ -572,15 +583,28 @@ export default function App() {
                 </div>
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={downloadCertificate}
-                className="px-8 py-4 bg-purple-600 text-white rounded-2xl font-bold flex items-center gap-2 mx-auto shadow-xl shadow-purple-500/20"
-              >
-                <Download className="w-5 h-5" />
-                Download Certificate
-              </motion.button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={downloadCertificate}
+                  disabled={isDownloading}
+                  className="px-8 py-4 bg-purple-600 text-white rounded-2xl font-bold flex items-center gap-2 shadow-xl shadow-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isDownloading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
+                  {isDownloading ? 'Generating...' : 'Download Certificate'}
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setCurrentScreen('leaderboard')}
+                  className="px-8 py-4 glass text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-white/10"
+                >
+                  <BarChart3 className="w-5 h-5" />
+                  View Live Rankings
+                </motion.button>
+              </div>
             </div>
 
             <button
