@@ -604,17 +604,6 @@ export default function App() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={downloadCertificate}
-                  disabled={isDownloading}
-                  className="px-8 py-4 bg-purple-600 text-white rounded-2xl font-bold flex items-center gap-2 shadow-xl shadow-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isDownloading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
-                  {isDownloading ? 'Generating...' : 'Download Certificate'}
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   onClick={() => setCurrentScreen('leaderboard')}
                   className="px-8 py-4 glass text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-white/10"
                 >
