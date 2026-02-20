@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  --color-navy-900: #020617;
+  --color-navy-800: #0f172a;
+  --color-navy-700: #1e293b;
+  --color-navy-600: #334155;
+}
+
+@layer base {
+  body {
+    @apply bg-navy-900 text-slate-200 antialiased selection:bg-purple-500/30;
+  }
+}
+
+.glass {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-orange-400;
+}
+
+@layer utilities {
+  .animate-shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  
+  .glow-correct {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    border-color: rgba(16, 185, 129, 0.6) !important;
+  }
+  
+  .glow-wrong {
+    box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+    border-color: rgba(244, 63, 94, 0.6) !important;
+  }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.certificate-bg {
+  background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+  border: 8px double rgba(255, 255, 255, 0.1);
+}
+
+.badge-gold { @apply bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 shadow-yellow-500/50; }
+.badge-silver { @apply bg-gradient-to-br from-slate-200 via-slate-400 to-slate-600 shadow-slate-400/50; }
+.badge-bronze { @apply bg-gradient-to-br from-orange-400 via-orange-600 to-orange-800 shadow-orange-600/50; }
+.badge-participation { @apply bg-gradient-to-br from-blue-400 via-blue-600 to-blue-800 shadow-blue-600/50; }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-navy-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-navy-700 rounded-full hover:bg-navy-600 transition-colors;
+}
